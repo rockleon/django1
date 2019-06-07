@@ -2,4 +2,4 @@
 First app using django
 
 Commit after completion of following tutorial-
-  Writing your first Django app, part 6
+  Writing your first Django app, part 7
