@@ -30,3 +30,9 @@ class User(models.Model):
 	password = models.CharField(max_length=20)
 	def __str__(self):
 		return self.username
+
+class User_Selected_Choice(models.Model):
+	user = models.ForeignKey(User, on_delete=None)
+	question = models.ForeignKey(Question, on_delete=None)
+	# choice = models.ForeignKey(Choice)
+	choice_selected = models.CharField(max_length=200)

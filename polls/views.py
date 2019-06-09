@@ -47,6 +47,7 @@ def login_check(request):
         password = request.POST['password']
         usr = User.objects.filter(username=username,password=password)
         if usr:
+            request.session['username'] = username
             return HttpResponseRedirect(reverse('polls:index'))
         else:
             return render(request, 'polls/login.html', {
