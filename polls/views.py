@@ -3,8 +3,9 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.db import models
 
-from .models import Choice, Question
+from .models import Choice, Question, User
 
 
 class IndexView(generic.ListView):
@@ -35,6 +36,24 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
+
+def login(request):
+    return render(request, "polls/login.html",{})
+
+def login_check(request):
+    username = password = ''
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        usr = User.objects.filter(username=username,password=password)
+        if usr:
+            return HttpResponseRedirect(reverse('polls:index'))
+        else:
+            return render(request, 'polls/login.html', {
+                'error_message': "Wrong username or password.",
+            })
+        
+
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:
@@ -48,6 +67,12 @@ def vote(request, question_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
+        # categories = []
+        # values = []
+        # for choice in question.choice_set.all():
+        #     values.append(choice.votes)
+        # request.session['val'] = values
+        # request.session.modified = True
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
